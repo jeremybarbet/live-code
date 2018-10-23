@@ -3,11 +3,10 @@
 }
 
 .App__overlay {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 
-  opacity: 0;
   pointer-events: none;
 
   position: absolute;
@@ -17,14 +16,11 @@
   left: 0;
 }
 
-.App__overlayShow {
-  opacity: 1;
-  pointer-events: all;
-}
-
 .App__block {
   position: absolute;
   z-index: 5;
+
+  opacity: 0;
 
   width: 400px;
   height: 300px;
@@ -32,10 +28,14 @@
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   background-color: #fff;
+
+  transform: translateY(40px);
 }
 
 .App__background {
   position: absolute;
+
+  opacity: 0;
 
   width: 100%;
   height: 100%;
