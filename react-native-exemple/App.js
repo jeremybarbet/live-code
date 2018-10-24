@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Animated } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -7,21 +7,74 @@ export default class App extends React.Component {
 
   state = {
     isVisible: false,
+    overlay: new Animated.Value(0),
+    background: new Animated.Value(0),
+    block: new Animated.Value(0),
   }
 
-  onToggleOverlay = () => {
-    const { isVisible } = this.state;
+  onToggleOverlay = (state) => {
+    const { overlay, background, block } = this.state;
+    const opening = state === 'open';
 
-    this.setState({ isVisible: !isVisible });
+    if (opening) {
+      this.setState({ isVisible: true });
+    }
+
+    Animated.parallel([
+      Animated.timing(overlay, {
+        toValue: opening ? 1 : 0,
+        duration: 400,
+      }),
+
+      Animated.timing(background, {
+        toValue: opening ? 1 : 0,
+        duration: 400,
+      }),
+
+      Animated.timing(block, {
+        toValue: opening ? 1 : 0,
+        duration: 400,
+      }),
+    ]).start(() => {
+      if (!opening) {
+        this.setState({ isVisible: false });
+      }
+    });
+  }
+
+  get containerBackground() {
+    const { background } = this.state;
+
+    return {
+      opacity: background.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+      }),
+    };
+  }
+
+  get containerBlock() {
+    const { block } = this.state;
+
+    return {
+      opacity: block.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1],
+      }),
+      transform: [{
+        translateY: block.interpolate({
+          inputRange: [0, 1],
+          outputRange: [40, 0],
+        }),
+      }],
+    };
   }
 
   render() {
     const { isVisible } = this.state;
-    const overlayStyles = [s.container__overlay];
     let pointerEvents = 'none';
 
     if (isVisible) {
-      overlayStyles.push(s.container__overlayVisible);
       pointerEvents = 'auto';
     }
 
@@ -31,15 +84,15 @@ export default class App extends React.Component {
           <Text>Open the overlay</Text>
         </TouchableOpacity>
 
-        <View style={overlayStyles} pointerEvents={pointerEvents}>
-          <View style={s.container__block}>
+        <Animated.View style={s.container__overlay} pointerEvents={pointerEvents}>
+          <Animated.View style={[s.container__block, this.containerBlock]}>
             <TouchableOpacity onPress={() => this.onToggleOverlay('close')}>
               <Text>Close the overlay</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
 
-          <View style={s.container__background} />
-        </View>
+          <Animated.View style={[s.container__background, this.containerBackground]} />
+        </Animated.View>
       </View>
     );
   }
@@ -57,8 +110,6 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
 
-    opacity: 0,
-
     position: 'absolute',
     top: 0,
     right: 0,
@@ -74,6 +125,8 @@ const s = StyleSheet.create({
     position: 'absolute',
     zIndex: 5,
 
+    opacity: 0,
+
     padding: 10,
 
     width: width - 40,
@@ -81,6 +134,8 @@ const s = StyleSheet.create({
 
     borderRadius: 6,
     backgroundColor: '#fff',
+
+    transform: [{ translateY: 40 }],
   },
 
   container__background: {
