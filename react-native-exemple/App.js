@@ -7,25 +7,15 @@ export default class App extends React.Component {
 
   state = {
     isVisible: false,
-    overlay: new Animated.Value(0),
     background: new Animated.Value(0),
     block: new Animated.Value(0),
   }
 
   onToggleOverlay = (state) => {
-    const { overlay, background, block } = this.state;
+    const { background, block } = this.state;
     const opening = state === 'open';
 
-    if (opening) {
-      this.setState({ isVisible: true });
-    }
-
     Animated.parallel([
-      Animated.timing(overlay, {
-        toValue: opening ? 1 : 0,
-        duration: 400,
-      }),
-
       Animated.timing(background, {
         toValue: opening ? 1 : 0,
         duration: 400,
@@ -35,11 +25,7 @@ export default class App extends React.Component {
         toValue: opening ? 1 : 0,
         duration: 400,
       }),
-    ]).start(() => {
-      if (!opening) {
-        this.setState({ isVisible: false });
-      }
-    });
+    ]).start(() => this.setState({ isVisible: opening }));
   }
 
   get containerBackground() {
@@ -84,7 +70,7 @@ export default class App extends React.Component {
           <Text>Open the overlay</Text>
         </TouchableOpacity>
 
-        <Animated.View style={s.container__overlay} pointerEvents={pointerEvents}>
+        <View style={s.container__overlay} pointerEvents={pointerEvents}>
           <Animated.View style={[s.container__block, this.containerBlock]}>
             <TouchableOpacity onPress={() => this.onToggleOverlay('close')}>
               <Text>Close the overlay</Text>
@@ -92,7 +78,7 @@ export default class App extends React.Component {
           </Animated.View>
 
           <Animated.View style={[s.container__background, this.containerBackground]} />
-        </Animated.View>
+        </View>
       </View>
     );
   }
@@ -101,9 +87,10 @@ export default class App extends React.Component {
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+
+    backgroundColor: '#fff',
   },
 
   container__overlay: {

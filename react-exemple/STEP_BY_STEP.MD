@@ -8,7 +8,7 @@ npx create-react-app react-exemple
 
 ### 2. Layout
 
-The HTML base
+The base
 
 ```jsx
 <div className="App">
