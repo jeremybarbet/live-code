@@ -1,6 +1,4 @@
-# Live coding
-
-## React
+# React
 
 ### 1. Create-react-app
 
@@ -266,9 +264,4 @@ render() {
 ...
 ```
 
-
 ### 8. Voilà!
-
----
-
-## React Native
