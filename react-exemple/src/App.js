@@ -18,9 +18,9 @@ class App extends Component {
 
     timeline.fromTo(
       '.App__overlay',
-      0,
-      { display: 'none', pointerEvents: 'none' },
-      { display: 'flex', pointerEvents: 'all' },
+      0.2,
+      { display: 'none' },
+      { display: 'flex' },
     );
 
     timeline.fromTo(

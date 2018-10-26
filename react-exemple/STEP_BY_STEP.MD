@@ -153,9 +153,9 @@ onToggleOverlay = () => {
 
 +  timeline.fromTo(
 +    '.App__overlay',
-+    0,
-+    { display: 'none', pointerEvents: 'none' },
-+    { display: 'flex', pointerEvents: 'all' },
++    0.2,
++    { display: 'none' },
++    { display: 'flex' },
 +  );
 
 +  timeline.fromTo(
@@ -228,9 +228,9 @@ Let's tweak the styles file
 
   timeline.fromTo(
     '.App__overlay',
-    0,
-    { display: 'none', pointerEvents: 'none' },
-    { display: 'flex', pointerEvents: 'all' },
+    0.2,
+    { display: 'none' },
+    { display: 'flex' },
   );
 
   timeline.fromTo(
