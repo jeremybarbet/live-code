@@ -285,7 +285,7 @@ Let's reverse the animation now
 -  onToggleOverlay = () => {
 +  onToggleOverlay = (state) => {
     const { isVisible, background, block } = this.state;
-+    const opening = state === 'opening';
++    const opening = state === 'open';
 
 -    this.setState({ isVisible: !isVisible });
 
